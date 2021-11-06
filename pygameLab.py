@@ -12,7 +12,7 @@ class life(object):
         self.frames = []
         self.flag = False
         self.bgColor = (0,0,0)
-        for i in range(100):
+        for i in range(225):
             self.alive.append(list((random.randint(0, self.width),random.randint(0, self.height))))
 
     def copy(self):
@@ -99,6 +99,20 @@ class life(object):
         self.screen.fill((0,0,0))
 
     def render(self):
+
+        if len(self.dead) != 0:
+            for i in self.dead:
+                localFlag = 0
+                self.x = i[0]
+                self.y = i[1]
+                self.limitsDef(self.x, self.y)
+                for cell in self.alive:
+                    if (cell in self.limits):
+                        localFlag += 1
+                        if (localFlag == 3):
+                            self.alive.append(i)
+                            self.dead.remove(i)
+
         for i in self.alive:
 
             localFlag = 0
@@ -111,15 +125,11 @@ class life(object):
                     if (cell in self.limits) and (cell != i):
                         localFlag += 1
                 
-                if localFlag < 2:
+                if (localFlag < 2) or (localFlag > 3):
                     self.dead.append(i)
                     self.alive.remove(i)
                     self.state = False
 
-                elif localFlag > 3:
-                    self.dead.append(i)
-                    self.alive.remove(i)
-                    self.state = False
             
             self.spaceship(self.x, self.y)
 
