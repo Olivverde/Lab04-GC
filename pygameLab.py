@@ -14,7 +14,7 @@ class life(object):
         self.frames = []
         self.flag = False
         self.bgColor = (0,0,0)
-        for i in range(115):
+        for i in range(150):
             self.alive.append(list((random.randint(0, self.width),random.randint(0, self.height))))
 
     def copy(self):
@@ -100,6 +100,32 @@ class life(object):
     def clear(self):
         self.screen.fill((0,0,0))
 
+    def printOut(self):
+
+        for i in self.alive:
+
+            localFlag = 0
+            self.x = i[0]
+            self.y = i[1]
+            
+            self.spaceship(self.x, self.y)
+
+            newX = self.x + random.randint(-1, 1)
+            newY = self.y + random.randint(-1, 1)
+
+            while True:
+                if self.state:
+                    if not ((newX > self.width) or (newX < 0) or (newY > self.height) or (newY < 0)):
+                        i[0] = newX
+                        i[1] = newY
+                        break
+                        
+                    else:
+                        newX = self.x + random.randint(-1, 1)
+                        newY = self.y + random.randint(-1, 1)
+                else:
+                    break
+
     def render(self):
 
         if len(self.dead) != 0:
@@ -129,80 +155,25 @@ class life(object):
                 
                 if (localFlag < 2) or (localFlag > 3):
                     self.alive_aux.append(cell)
-                    print(localFlag, 'alive')
-                else:
-                    print(localFlag, 'alive HERE')
+                
             
             for aux_cell in self.alive_aux:
                 self.dead.append(aux_cell)
                 self.alive.remove(aux_cell) 
             self.alive_aux = []
             self.limits = []
-            
-        for i in self.alive:
 
-            localFlag = 0
-            self.x = i[0]
-            self.y = i[1]
-            
-            self.spaceship(self.x, self.y)
+        #self.printOut()
 
-            newX = self.x + random.randint(-1, 1)
-            newY = self.y + random.randint(-1, 1)
-
-            while True:
-                if self.state:
-                    if not ((newX > self.width) or (newX < 0) or (newY > self.height) or (newY < 0)):
-                        i[0] = newX
-                        i[1] = newY
-                        break
-                        
-                    else:
-                        newX = self.x + random.randint(-1, 1)
-                        newY = self.y + random.randint(-1, 1)
-                else:
-                    break
-
-        """-----------------------------------------------------------""" 
         for dead_cell in self.dead_aux:
-            print(len(self.dead_aux))
             self.alive.append(dead_cell)
             self.dead.remove(dead_cell)
         self.dead_aux = []
         self.limits = []
 
-
-        for i in self.alive:
-
-            localFlag = 0
-            self.x = i[0]
-            self.y = i[1]
-            
-            self.spaceship(self.x, self.y)
-
-            newX = self.x + random.randint(-1, 1)
-            newY = self.y + random.randint(-1, 1)
-
-            while True:
-                if self.state:
-                    if not ((newX > self.width) or (newX < 0) or (newY > self.height) or (newY < 0)):
-                        i[0] = newX
-                        i[1] = newY
-                        break
-                        
-                    else:
-                        newX = self.x + random.randint(-1, 1)
-                        newY = self.y + random.randint(-1, 1)
-                else:
-                    break
-        
+        self.printOut()
         self.flag = True
-        print(len(self.alive),len(self.dead))
     
-
-        
-
-
 pygame.init()
 screen =pygame.display.set_mode((100,100))
 
@@ -210,7 +181,7 @@ r = life(screen)
 
 while True:
 
-    pygame.time.delay(1000)
+    pygame.time.delay(100)
     r.copy()
     r.clear()
     r.render()
