@@ -101,25 +101,25 @@ class life(object):
         self.screen.fill((0,0,0))
 
     def printOut(self):
-
+        # Print alive cells on screen
         for i in self.alive:
-
+            # Extract x,y location
             localFlag = 0
             self.x = i[0]
             self.y = i[1]
-            
+            # Print a spaceship shaped cell
             self.spaceship(self.x, self.y)
-
+            # Get new coordinates
             newX = self.x + random.randint(-1, 1)
             newY = self.y + random.randint(-1, 1)
-
+            # While new coordinates keep within limits
             while True:
                 if self.state:
                     if not ((newX > self.width) or (newX < 0) or (newY > self.height) or (newY < 0)):
                         i[0] = newX
                         i[1] = newY
                         break
-                        
+                    # Otherwise gives new coordinates
                     else:
                         newX = self.x + random.randint(-1, 1)
                         newY = self.y + random.randint(-1, 1)
@@ -127,36 +127,39 @@ class life(object):
                     break
 
     def render(self):
-
+        # Verifies that dead_array isn't empty
         if len(self.dead) != 0:
             for i in self.dead:
+                # Extract current x,y location
                 localFlag = 0
                 self.x = i[0]
                 self.y = i[1]
+                # Extract limits of current dead cell
                 self.limitsDef(self.x, self.y)
+                # Verifies the number of alive cells
                 for cell in self.alive:
                     if (cell in self.limits):
                         localFlag += 1
                 if (localFlag == 3):
+                    # Storage most likely alive cells
                     self.dead_aux.append(i)
         
-
+        # Verifies that first loop has been completed
         if self.flag:
-
             for cell in self.alive:
                 localFlag = 0
                 self.x = cell[0]
                 self.y = cell[1]
                 self.limitsDef(self.x, self.y)
-
+                # Verifies alive cells limits
                 for alive_cell in self.alive:
                     if (alive_cell in self.limits) and (cell != alive_cell) and not(alive_cell in self.alive_aux):
                         localFlag += 1
-                
+                # Alive-dead condition
                 if (localFlag < 2) or (localFlag > 3):
                     self.alive_aux.append(cell)
                 
-            
+            # Extract coordinates from aux_array to dead one
             for aux_cell in self.alive_aux:
                 self.dead.append(aux_cell)
                 self.alive.remove(aux_cell) 
@@ -164,13 +167,13 @@ class life(object):
             self.limits = []
 
         #self.printOut()
-
+        # Extract coordinates from aux_array to alive one
         for dead_cell in self.dead_aux:
             self.alive.append(dead_cell)
             self.dead.remove(dead_cell)
         self.dead_aux = []
         self.limits = []
-
+        # Print
         self.printOut()
         self.flag = True
     
